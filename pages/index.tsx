@@ -4,31 +4,35 @@ import { useState } from "react";
 const Home: NextPage = () => {
   const [counter, setCounter] = useState(0);
   return (
-    <div className="bg-slate-400 py-20 px-20 grid gap-10 min-h-screen">
-      <div className="bg-white p-6 rounded-3xl shadow-xl">
-        <span className="font-semibold text-3xl">Select Item</span>
-        <div className="flex justify-between my-2">
-          <span className="text-gray-500">Grey Chair</span>
-          <span className="font-semibold">$19</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Grey Chair</span>
-          <span className="font-semibold">$19</span>
-        </div>
+    <div className="bg-slate-400 xl:place-content-center py-20 px-20 grid gap-10 lg:grid-cols-2 xl:grid-cols-3 min-h-screen">
+      <div className="bg-white dark:bg-black flex flex-col justify-between p-6 rounded-3xl shadow-xl">
+        <span className="font-semibold dark:text-white text-3xl">
+          Select Item
+        </span>
+        <ul>
+          {[1, 2].map((i) => (
+            <div key={i} className="flex justify-between my-2 ">
+              <span className="text-gray-500 dark:text-gray-300">
+                Grey Chair
+              </span>
+              <span className="font-semibold dark:text-white">$19</span>
+            </div>
+          ))}
+        </ul>
         <div className="flex justify-between mt-2 pt-2 border-t-2 border-dashed">
           <span>Total</span>
           <span className="font-semibold">$10</span>
         </div>
         <button
-          className="mt-5 bg-blue-500 text-white p-3 text-center 
-          rounded-xl w-1/2 mx-auto hover:bg-teal-500 hover:text-black
+          className="mt-5 mx-auto bg-blue-500 dark:bg-black dark:border-white dark:border text-white p-3 text-center 
+          rounded-xl w-3/4 block dark:hover:bg-white hover:bg-teal-500 dark:hover:text-black
           active:bg-yellow-500 focus:bg-red-500"
         >
           Checkout
         </button>
       </div>
-      <div className="bg-white overflow-hidden rounded-3xl shadow-xl">
-        <div className="bg-blue-500 p-6 pb-14">
+      <div className="bg-white overflow-hidden rounded-3xl shadow-xl group">
+        <div className="bg-blue-500 portrait:bg-indigo-600 landscape:bg-teal-500 p-6 pb-14 xl:pb-40">
           <span className="text-white text-2xl">Profile</span>
         </div>
         <div className="rounded-3xl p-6 bg-white relative -top-5">
@@ -37,7 +41,7 @@ const Home: NextPage = () => {
               <span className="text-sm text-gray-500">Orders</span>
               <span className="font-medium">340</span>
             </div>
-            <div className="h-24 w-24 bg-red-400 rounded-full" />
+            <div className="h-24 w-24 bg-zinc-300 rounded-full group-hover:bg-red-300 transition-colors" />
             <div className="flex flex-col items-center">
               <span className="text-sm text-gray-500">Spent</span>
               <span className="font-medium">$340</span>
@@ -49,7 +53,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white p-6 rounded-3xl shadow-xl">
+      <div className="bg-white p-6 rounded-3xl shadow-xl lg:col-span-2 xl:col-span-1">
         <div className="flex mb-5 justify-between items-center">
           <span>🔙</span>
           <div className="space-x-3">
@@ -93,6 +97,35 @@ const Home: NextPage = () => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="flex items-center bg-white focus-within:bg-blue-100 overflow-hidden rounded-3xl shadow-xl">
+        <form className="w-full flex flex-col space-y-2 p-5">
+          <input
+            type="text"
+            required
+            placeholder="Username"
+            className="border p-1 peer border-gray-400 rounded-md"
+          />
+          <span className="peer-invalid:text-red-500 peer-valid:hidden">
+            This input is invalid
+          </span>
+          <span className="peer-valid:text-teal-500 peer-invalid:hidden">
+            Awesome username
+          </span>
+          <input
+            type="submit"
+            value="Login"
+            className="bg-blue-500 text-white rounded-md py-1 cursor-pointer"
+          />
+        </form>
+      </div>
+      <div className="bg-white p-6 rounded-3xl shadow-xl flex flex-col space-y-2">
+        <p className="first-letter:text-3xl first-letter:hover:text-purple-400">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit quam
+          architecto itaque incidunt quisquam deleniti modi, iusto aperiam
+          temporibus accusamus atque adipisci similique illo vel quibusdam. Sed
+          amet quasi voluptatibus.
+        </p>
       </div>
     </div>
   );
