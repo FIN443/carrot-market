@@ -1,64 +1,45 @@
-import withHandler from "@libs/server/withHandler";
+import twilio from "twilio";
 import { NextApiRequest, NextApiResponse } from "next";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   const { phone, email } = req.body;
-  const payload = phone ? { phone: +phone } : { email };
+  const user = phone ? { phone: +phone } : email ? { email } : null;
+  if (!user) return res.status(400).json({ ok: false });
+  const payload = Math.floor(100000 + Math.random() * 900000) + "";
   const token = await client.token.create({
     data: {
-      payload: "1234",
+      payload,
       user: {
         connectOrCreate: {
           where: {
-            ...payload,
+            ...user,
           },
           create: {
             name: "Anonymous",
-            ...payload,
+            ...user,
           },
         },
       },
     },
   });
-  console.log(token);
-  /* if (email) {
-    user = await client.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-    if (user) console.log("founded");
-    if (!user) {
-      console.log("Did not find. Will create.");
-      user = await client.user.create({
-        data: {
-          name: "Anonymous",
-          email: email,
-        },
-      });
-    }
-    console.log(user);
-  }
   if (phone) {
-    user = await client.user.findUnique({
-      where: {
-        phone: +phone,
-      },
+    const message = await twilioClient.messages.create({
+      messagingServiceSid: process.env.TWILIO_MSID,
+      to: process.env.MY_PHONE!,
+      body: `Your login token is ${payload}`,
     });
-    if (user) console.log("founded");
-    if (!user) {
-      console.log("Did not find. Will create.");
-      user = await client.user.create({
-        data: {
-          name: "Anonymous",
-          phone: +phone,
-        },
-      });
-    }
-    console.log(user);
-  } */
-  return res.status(200).end();
+    console.log(message);
+  }
+  return res.json({
+    ok: true,
+  });
 }
 
 export default withHandler("POST", handler);
