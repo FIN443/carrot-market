@@ -13,6 +13,7 @@ const cookieOptions = {
   password: process.env.COOKIE_PASSWORD!,
 };
 
+// API URL 보호(암호화)
 export function withApiSession(fn: any) {
   return withIronSessionApiRoute(fn, cookieOptions);
 }

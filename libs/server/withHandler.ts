@@ -11,6 +11,7 @@ interface ConfigType {
   isPrivate?: boolean;
 }
 
+// API Custom Handler
 export default function withHandler({
   method,
   isPrivate = true,
