@@ -1,3 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-// 데이터베이스
-export default new PrismaClient();
+// Database
+
+declare global {
+  var client: PrismaClient | undefined;
+}
+
+const client = global.client || new PrismaClient();
+
+if (process.env.NODE_ENV === "development") global.client = client;
+
+export default client;
