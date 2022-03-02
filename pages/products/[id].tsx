@@ -39,18 +39,18 @@ const ItemDetail: NextPage = () => {
       <div className="px-4  py-4">
         <div className="mb-8">
           <div className="h-96 bg-slate-300" />
-          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-slate-300" />
-            <div>
-              <p className="text-sm font-medium text-gray-700">
-                {data?.product?.user?.name}
-              </p>
-              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
-                <a className="text-xs font-medium text-gray-500">
+          <div className="flex py-3 border-t border-b">
+            <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+              <a className="flex items-center space-x-3 text-xs font-medium text-gray-500">
+                <div className="w-12 h-12 rounded-full bg-slate-300" />
+                <div>
+                  <p className="text-sm font-medium text-gray-700">
+                    {data?.product?.user?.name}
+                  </p>
                   View profile &rarr;
-                </a>
-              </Link>
-            </div>
+                </div>
+              </a>
+            </Link>
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
