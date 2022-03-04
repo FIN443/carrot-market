@@ -8,6 +8,7 @@ import { Product, User } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
+import { useEffect } from "react";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -34,6 +35,11 @@ const ItemDetail: NextPage = () => {
     // mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({});
   };
+  useEffect(() => {
+    if (data && !data?.ok) {
+      router.push("/");
+    }
+  }, [router, data]);
   return (
     <Layout canGoBack>
       <div className="px-4  py-4">

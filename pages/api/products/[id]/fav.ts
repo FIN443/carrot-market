@@ -12,21 +12,30 @@ async function handler(
     query: { id },
     session: { user },
   } = req;
+  const product = await client.product.findUnique({
+    where: {
+      id: +id.toString(),
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (!product) res.status(404).json({ ok: false, error: "Not found product" });
   const alreadyExists = await client.fav.findFirst({
     where: {
-      productId: +id.toString(),
+      productId: product?.id,
       userId: user?.id,
     },
   });
   if (alreadyExists) {
-    // delete(if has unique)
+    // delete fav(if has unique)
     await client.fav.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    // create
+    // create fav
     await client.fav.create({
       data: {
         user: {

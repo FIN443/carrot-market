@@ -26,6 +26,7 @@ async function handler(
       },
     },
   });
+  if (!product) res.status(404).json({ ok: false, error: "Not found product" });
   // 물품 이름을 " "을 기준으로 split 후 'OR' 검색 조건에 맞춤
   const terms = product?.name.split(" ").map((word) => ({
     name: {
