@@ -22,13 +22,16 @@ Prisma 관리자 실행
 npx prisma studio
 ```
 
-### To Do
+### Code Challenges
 
 - [ ] Geo data to User Login
 - [ ] Input geo range & search products
-- [ ] Separate schema Fav / Sale / Purchase
+- [x] Separate schema Fav / Sale / Purchase
+- [x] Integrate same api code
 
 ```typescript
+// Database
+
 model Record {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -45,4 +48,19 @@ enum Kind {
   Sale
   Fav
 }
+
+// Api
+
+route - `/api/users/me/records?kind=${kind}`
+
+const {
+  query: { kind }
+  } = req;
+
+const data = await client.record.findMany({
+  where: {
+    userId: user?.id,
+    kind,
+  }
+});
 ```

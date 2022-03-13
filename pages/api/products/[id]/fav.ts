@@ -1,3 +1,4 @@
+import { Kind } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
@@ -21,22 +22,23 @@ async function handler(
     },
   });
   if (!product) res.status(404).json({ ok: false, error: "Not found product" });
-  const alreadyExists = await client.fav.findFirst({
+  const alreadyExists = await client.record.findFirst({
     where: {
       productId: product?.id,
       userId: user?.id,
+      kind: "Fav",
     },
   });
   if (alreadyExists) {
     // delete fav(if has unique)
-    await client.fav.delete({
+    await client.record.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
     // create fav
-    await client.fav.create({
+    await client.record.create({
       data: {
         user: {
           connect: {
@@ -48,6 +50,7 @@ async function handler(
             id: +id.toString(),
           },
         },
+        kind: "Fav",
       },
     });
   }

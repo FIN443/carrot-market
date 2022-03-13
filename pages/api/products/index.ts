@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { Kind } from "@prisma/client";
 
 async function handler(
   req: NextApiRequest,
@@ -10,7 +11,11 @@ async function handler(
   if (req.method === "GET") {
     const products = await client.product.findMany({
       include: {
-        _count: { select: { favs: true } },
+        records: {
+          where: {
+            kind: "Fav",
+          },
+        },
       },
     });
     res.json({
