@@ -10,12 +10,33 @@ async function handler(
   const {
     session: { user },
   } = req;
-  const favs = await client.fav.findMany({
+  const favs = await client.record.findMany({
     where: {
       userId: user?.id,
+      product: {
+        records: {
+          every: {
+            userId: user?.id,
+            kind: "Fav",
+          },
+        },
+      },
     },
     include: {
-      product: true,
+      product: {
+        include: {
+          records: {
+            where: {
+              kind: "Fav",
+            },
+            select: {
+              createAt: true,
+              updatedAt: true,
+              kind: true,
+            },
+          },
+        },
+      },
     },
   });
   res.json({

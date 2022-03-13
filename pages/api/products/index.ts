@@ -15,6 +15,11 @@ async function handler(
           where: {
             kind: "Fav",
           },
+          select: {
+            createAt: true,
+            updatedAt: true,
+            kind: true,
+          },
         },
       },
     });
