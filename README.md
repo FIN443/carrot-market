@@ -64,3 +64,18 @@ const data = await client.record.findMany({
   }
 });
 ```
+
+- [x] Add useUser to \_app.tsx and edit useUser.ts
+
+```typescript
+export function useUser(arg:string) {
+  const router = useRouter();
+  if(router.pathname !== arg) {
+    // Apply useUser()
+    ...
+  }
+  ...
+}
+```
+
+- [ ] Separate Loading Component
