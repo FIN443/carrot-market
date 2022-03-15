@@ -20,7 +20,9 @@ async function handler(
       id: true,
     },
   });
-  if (!post) res.status(404).json({ ok: false, error: "Not found post" });
+  if (!post) {
+    res.status(404).json({ ok: false, error: "Post not found." });
+  }
   const newAnswer = await client.answer.create({
     data: {
       user: {

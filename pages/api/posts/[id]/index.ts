@@ -44,7 +44,9 @@ async function handler(
       },
     },
   });
-  if (!post) res.status(404).json({ ok: false, error: "Not found post" });
+  if (!post) {
+    return res.status(404).json({ ok: false, error: "Post not found." });
+  }
   const isWondering = Boolean(
     await client.wondering.findFirst({
       where: {

@@ -21,7 +21,9 @@ async function handler(
       id: true,
     },
   });
-  if (!product) res.status(404).json({ ok: false, error: "Not found product" });
+  if (!product) {
+    return res.status(404).json({ ok: false, error: "Product not found." });
+  }
   const alreadyExists = await client.record.findFirst({
     where: {
       productId: product?.id,

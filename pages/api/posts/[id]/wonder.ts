@@ -19,7 +19,9 @@ async function handler(
       id: true,
     },
   });
-  if (!post) res.status(404).json({ ok: false, error: "Not found post" });
+  if (!post) {
+    return res.status(404).json({ ok: false, error: "Post not found." });
+  }
   const alreadyExists = await client.wondering.findFirst({
     where: {
       userId: user?.id,
