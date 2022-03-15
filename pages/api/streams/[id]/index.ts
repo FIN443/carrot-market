@@ -14,6 +14,20 @@ async function handler(
     where: {
       id: +id.toString(),
     },
+    include: {
+      messages: {
+        select: {
+          id: true,
+          message: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!stream) {
     return res.status(404).json({ ok: false, error: "Stream not found." });
