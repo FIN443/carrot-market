@@ -17,6 +17,7 @@
     "react": "^18.0.0-rc.0",
     "react-dom": "^18.0.0-rc.0",
     "react-hook-form": "^7.27.1",
+    "react-swr-infinite-scroll": "^1.0.1",
     "swr": "^1.2.2",
     "ts-node": "^10.7.0",
     "twilio": "^3.74.0"

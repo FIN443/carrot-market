@@ -79,3 +79,4 @@ export function useUser(arg:string) {
 ```
 
 - [ ] Separate Loading Component
+- [ ] Add Page InfiniteScroll using SWR (Hard)

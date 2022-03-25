@@ -4,6 +4,10 @@ import FloatingButton from "@components/floating-button";
 import Layout from "@components/layout";
 import { Stream } from "@prisma/client";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+import { useInfiniteScroll } from "@libs/client/useInfiniteScroll";
+import { useEffect } from "react";
+import InfiniteScroll from "react-swr-infinite-scroll";
 
 interface StreamResponse {
   ok: boolean;
@@ -11,7 +15,7 @@ interface StreamResponse {
 }
 
 const Stream: NextPage = () => {
-  const { data } = useSWR<StreamResponse>(`/api/streams`);
+  const { data } = useSWR<StreamResponse>(`/api/streams?page=${1}`);
   return (
     <Layout hasTabBar title="라이브">
       <div className=" divide-y-[1px] space-y-4">
@@ -25,6 +29,7 @@ const Stream: NextPage = () => {
             </a>
           </Link>
         ))}
+        <div style={{ maxWidth: "400px" }}></div>
         <FloatingButton href="/streams/create">
           <svg
             className="w-6 h-6"
