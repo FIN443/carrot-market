@@ -30,11 +30,12 @@ async function handler(
       stream,
     });
   } else if (req.method === "GET") {
+    const streamPage = await client.stream.count();
     const streams = await client.stream.findMany({
       take: 10,
       skip: (+page - 1) * 10,
     });
-    res.json({ ok: true, streams });
+    res.json({ ok: true, streams, pages: Math.ceil(streamPage / 10) });
   }
 }
 

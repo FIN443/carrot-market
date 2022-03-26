@@ -5,21 +5,58 @@ import Layout from "@components/layout";
 import { Stream } from "@prisma/client";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
-import { useInfiniteScroll } from "@libs/client/useInfiniteScroll";
 import { useEffect } from "react";
-import InfiniteScroll from "react-swr-infinite-scroll";
 
 interface StreamResponse {
   ok: boolean;
   streams: Stream[];
+  pages: number;
 }
 
+const getKey = (pageIndex: number, previousPageData: any) => {
+  if (pageIndex === 0) return `/api/streams?page=1`;
+  if (pageIndex + 1 > previousPageData.pages) return null;
+  return `/api/streams?page=${pageIndex + 1}`;
+};
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const Stream: NextPage = () => {
-  const { data } = useSWR<StreamResponse>(`/api/streams?page=${1}`);
+  // const { data } = useSWR<StreamResponse>(`/api/streams?page=${1}`);
+  const { data, size, setSize } = useSWRInfinite<StreamResponse>(
+    getKey,
+    fetcher
+  );
+  console.log(data);
+  const streams = data ? data.map((item) => item.streams).flat() : [];
+  function handleScroll() {
+    if (
+      document.documentElement.scrollTop + window.innerHeight ===
+      document.documentElement.scrollHeight
+    ) {
+      setSize((p) => p + 1);
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <Layout hasTabBar title="라이브">
       <div className=" divide-y-[1px] space-y-4">
-        {data?.streams?.map((stream) => (
+        {/* {data?.streams?.map((stream) => (
+          <Link key={stream.id} href={`/streams/${stream.id}`}>
+            <a className="pt-4 block  px-4">
+              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
+              <h1 className="text-2xl mt-2 font-bold text-gray-900">
+                {stream.name}
+              </h1>
+            </a>
+          </Link>
+        ))} */}
+        {streams.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>
             <a className="pt-4 block  px-4">
               <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
