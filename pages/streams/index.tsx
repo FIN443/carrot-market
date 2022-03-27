@@ -13,7 +13,7 @@ interface StreamResponse {
   pages: number;
 }
 
-const getKey = (pageIndex: number, previousPageData: any) => {
+const getKey = (pageIndex: number, previousPageData: StreamResponse) => {
   if (pageIndex === 0) return `/api/streams?page=1`;
   if (pageIndex + 1 > previousPageData.pages) return null;
   return `/api/streams?page=${pageIndex + 1}`;
@@ -26,7 +26,6 @@ const Stream: NextPage = () => {
     getKey,
     fetcher
   );
-  console.log(data);
   const streams = data ? data.map((item) => item.streams).flat() : [];
   function handleScroll() {
     if (
