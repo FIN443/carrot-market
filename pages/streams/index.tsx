@@ -3,9 +3,9 @@ import Link from "next/link";
 import FloatingButton from "@components/floating-button";
 import Layout from "@components/layout";
 import { Stream } from "@prisma/client";
-import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { useEffect } from "react";
+import { useInfiniteScroll } from "@libs/client/useInfiniteScroll";
 
 interface StreamResponse {
   ok: boolean;
@@ -21,40 +21,16 @@ const getKey = (pageIndex: number, previousPageData: StreamResponse) => {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Stream: NextPage = () => {
-  // const { data } = useSWR<StreamResponse>(`/api/streams?page=${1}`);
-  const { data, size, setSize } = useSWRInfinite<StreamResponse>(
-    getKey,
-    fetcher
-  );
+  const { data, setSize } = useSWRInfinite<StreamResponse>(getKey, fetcher);
   const streams = data ? data.map((item) => item.streams).flat() : [];
-  function handleScroll() {
-    if (
-      document.documentElement.scrollTop + window.innerHeight ===
-      document.documentElement.scrollHeight
-    ) {
-      setSize((p) => p + 1);
-    }
-  }
+  const page = useInfiniteScroll();
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    setSize(page);
+  }, [setSize, page]);
 
   return (
     <Layout hasTabBar title="라이브">
       <div className=" divide-y-[1px] space-y-4">
-        {/* {data?.streams?.map((stream) => (
-          <Link key={stream.id} href={`/streams/${stream.id}`}>
-            <a className="pt-4 block  px-4">
-              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-              <h1 className="text-2xl mt-2 font-bold text-gray-900">
-                {stream.name}
-              </h1>
-            </a>
-          </Link>
-        ))} */}
         {streams.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>
             <a className="pt-4 block  px-4">
